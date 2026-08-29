@@ -1,0 +1,110 @@
+import { NextResponse } from 'next/server';
+import sql from 'mssql';
+
+let serverHost = process.env.DB_SERVER || '160.187.80.212';
+let serverPort = parseInt(process.env.DB_PORT || '15379', 10);
+
+if (serverHost.includes(',')) {
+  const parts = serverHost.split(',');
+  serverHost = parts[0].trim();
+  if (parts[1]) serverPort = parseInt(parts[1].trim(), 10);
+}
+
+const config = {
+  user: process.env.DB_USER || 'sa',
+  password: process.env.DB_PASSWORD || 'SunriseDb@2025',
+  server: serverHost,
+  port: serverPort,
+  database: process.env.DB_DATABASE || 'dbSCRM_EmpSunrise',
+  options: {
+    encrypt: false,
+    trustServerCertificate: true,
+  },
+};
+
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    
+    // Generate Reference Number
+    const reference = `ENQ-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+    
+    // Get IP Address
+    const ipAddress = request.headers.get('x-forwarded-for') || 
+                      request.headers.get('x-real-ip') || 
+                      '0.0.0.0';
+    
+    const pool = await sql.connect(config);
+
+    // Auto-migration check: ensure RoleSpecificData column exists in tbl_SoftwareDiscovery_Enquiries
+    await pool.request().query(`
+      IF NOT EXISTS (
+        SELECT * FROM INFORMATION_SCHEMA.COLUMNS 
+        WHERE TABLE_NAME = 'tbl_SoftwareDiscovery_Enquiries' AND COLUMN_NAME = 'RoleSpecificData'
+      )
+      BEGIN
+        ALTER TABLE tbl_SoftwareDiscovery_Enquiries ADD RoleSpecificData NVARCHAR(MAX);
+      END
+    `);
+    
+    const result = await pool.request()
+      .input('EnquiryReference', sql.NVarChar(50), reference)
+      .input('CustomerName', sql.NVarChar(200), body.customerName)
+      .input('CompanyName', sql.NVarChar(200), body.companyName || null)
+      .input('MobileNumber', sql.NVarChar(30), body.mobileNumber)
+      .input('Email', sql.NVarChar(200), body.email || null)
+      .input('Address', sql.NVarChar(500), body.address || null)
+      .input('City', sql.NVarChar(100), body.city || null)
+      .input('State', sql.NVarChar(100), body.state || null)
+      .input('Country', sql.NVarChar(100), body.country || 'India')
+      .input('PreferredLanguage', sql.NVarChar(50), body.preferredLanguage || 'English')
+      .input('Status', sql.NVarChar(30), 'New')
+      .input('Source', sql.NVarChar(50), body.source) // 'SoftwareExpert' or 'Podcaster'
+      .input('CurrentStep', sql.Int, 1)
+      .input('CompletionPercentage', sql.Decimal(5,2), 100)
+      .input('IsSubmitted', sql.Bit, 1)
+      .input('SubmittedAt', sql.DateTime2, new Date())
+      .input('CreatedAt', sql.DateTime2, new Date())
+      .input('ModifiedAt', sql.DateTime2, new Date())
+      .input('IPAddress', sql.NVarChar(50), ipAddress)
+      .input('IsActive', sql.Bit, 1)
+      .input('IsDeleted', sql.Bit, 0)
+      .input('ClientSessionId', sql.NVarChar(100), body.clientSessionId || null)
+      .input('RoleSpecificData', sql.NVarChar(sql.MAX), JSON.stringify(body.roleSpecificData || {}))
+      .input('RecommendationJson', sql.NVarChar(sql.MAX), body.recommendationJson || null)
+      .input('ProposalJson', sql.NVarChar(sql.MAX), body.proposalJson || null)
+      .query(`
+        INSERT INTO tbl_SoftwareDiscovery_Enquiries (
+            EnquiryReference, CustomerName, CompanyName, MobileNumber, Email,
+            Address, City, State, Country, PreferredLanguage,
+            Status, Source, CurrentStep, CompletionPercentage,
+            IsSubmitted, SubmittedAt, CreatedAt, ModifiedAt,
+            IPAddress, IsActive, IsDeleted, ClientSessionId,
+            RoleSpecificData, RecommendationJson, ProposalJson
+        ) VALUES (
+            @EnquiryReference, @CustomerName, @CompanyName, @MobileNumber, @Email,
+            @Address, @City, @State, @Country, @PreferredLanguage,
+            @Status, @Source, @CurrentStep, @CompletionPercentage,
+            @IsSubmitted, @SubmittedAt, @CreatedAt, @ModifiedAt,
+            @IPAddress, @IsActive, @IsDeleted, @ClientSessionId,
+            @RoleSpecificData, @RecommendationJson, @ProposalJson
+        );
+        SELECT SCOPE_IDENTITY() AS EnquiryId;
+      `);
+    
+    await pool.close();
+    
+    return NextResponse.json({
+      success: true,
+      enquiryId: result.recordset[0].EnquiryId,
+      enquiryReference: reference
+    });
+    
+  } catch (error) {
+    console.error('Database error:', error);
+    return NextResponse.json(
+      { error: 'Failed to save enquiry: ' + (error.message || error) },
+      { status: 500 }
+    );
+  }
+}
