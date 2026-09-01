@@ -59,9 +59,6 @@ const rolesDashboard = [
 export function RoleDashboard() {
   const handleRoleClick = (e: React.MouseEvent<HTMLAnchorElement>, item: typeof rolesDashboard[0]) => {
     e.preventDefault();
-    if (item.id === "products") {
-      window.dispatchEvent(new CustomEvent("open-software-matrix"));
-    }
     const targetEl = document.querySelector(item.target);
     if (targetEl) {
       targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
