@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import sql from 'mssql';
+import { sendTeamEnquiryNotification, sendClientEnquiryConfirmation } from '@/lib/getgabs/whatsapp';
 
 let serverHost = process.env.DB_SERVER || '160.187.80.212';
 let serverPort = parseInt(process.env.DB_PORT || '15379', 10);
@@ -94,10 +95,43 @@ export async function POST(request) {
     
     await pool.close();
     
+    // Construct enquiry details for WhatsApp notifications
+    const enquiryData = {
+      enquiryId: result.recordset[0].EnquiryId,
+      enquiryReference: reference,
+      customerName: body.customerName,
+      companyName: body.companyName,
+      mobileNumber: body.mobileNumber,
+      email: body.email,
+      address: body.address,
+      city: body.city,
+      state: body.state,
+      country: body.country || 'India',
+      source: body.source,
+      message: body.message,
+      requirement: body.requirement,
+      roleSpecificData: body.roleSpecificData,
+    };
+
+    let whatsappStatus = { team: false, client: false };
+
+    // Trigger Getgabs WhatsApp notifications only after confirmed database insertion
+    try {
+      const [teamRes, clientRes] = await Promise.all([
+        sendTeamEnquiryNotification(enquiryData),
+        sendClientEnquiryConfirmation(enquiryData)
+      ]);
+      whatsappStatus.team = teamRes.success;
+      whatsappStatus.client = clientRes.success;
+    } catch (waErr) {
+      console.error('[WhatsApp] Error sending notifications:', waErr.message || waErr);
+    }
+
     return NextResponse.json({
       success: true,
       enquiryId: result.recordset[0].EnquiryId,
-      enquiryReference: reference
+      enquiryReference: reference,
+      whatsapp: whatsappStatus
     });
     
   } catch (error) {
