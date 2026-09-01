@@ -61,11 +61,10 @@ export function RoleDashboard() {
     e.preventDefault();
     if (item.id === "products") {
       window.dispatchEvent(new CustomEvent("open-software-matrix"));
-    } else {
-      const targetEl = document.querySelector(item.target);
-      if (targetEl) {
-        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+    }
+    const targetEl = document.querySelector(item.target);
+    if (targetEl) {
+      targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 

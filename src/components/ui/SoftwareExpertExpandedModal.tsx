@@ -38,13 +38,13 @@ export function SoftwareExpertExpandedModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const isModalOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const isModalOpen = Boolean(externalIsOpen || internalIsOpen);
 
   const handleCloseModal = () => {
+    setInternalIsOpen(false);
     if (externalOnClose) {
       externalOnClose();
     }
-    setInternalIsOpen(false);
   };
 
   useEffect(() => {

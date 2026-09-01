@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Truck,
@@ -277,6 +277,16 @@ export function Products() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isExpandedModalOpen, setIsExpandedModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"reels" | "videos">("reels");
+
+  useEffect(() => {
+    const handleGlobalOpen = () => {
+      setIsExpandedModalOpen(true);
+    };
+    window.addEventListener("open-software-matrix", handleGlobalOpen);
+    return () => {
+      window.removeEventListener("open-software-matrix", handleGlobalOpen);
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
