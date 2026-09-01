@@ -111,9 +111,9 @@ export function formatLocation(enquiry) {
  */
 export async function sendWhatsAppTemplate({ to, receiverName, templateName, parameters }) {
   const apiUrl = process.env.GETGABS_API_URL || 'https://app.getgabs.com/whatsappbusiness/send-templated-message';
-  const apiKey = process.env.GETGABS_API_KEY;
+  const apiKey = process.env.GETGABS_API_KEY || 'KhRk8LMSoKY4uKtiISPmuInSeQMEjPUxY39wccR4RE9uOqb3xvFZejr7';
   const sender = process.env.GETGABS_SENDER || '918799441838';
-  const campaignId = process.env.GETGABS_CAMPAIGN_ID || 'put_campaign_id';
+  const campaignId = process.env.GETGABS_CAMPAIGN_ID || '26103';
 
   if (!apiKey) {
     console.error('[WhatsApp Error] GETGABS_API_KEY is not configured in environment variables.');
