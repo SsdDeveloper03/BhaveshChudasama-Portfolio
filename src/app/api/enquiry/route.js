@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import sql from 'mssql';
 import { sendTeamEnquiryNotification, sendClientEnquiryConfirmation } from '@/lib/getgabs/whatsapp';
 
@@ -24,9 +24,6 @@ const config = {
 };
 
 export async function POST(request) {
-  let enquiryId = null;
-  let dbSaved = false;
-
   try {
     const body = await request.json();
     
@@ -38,12 +35,16 @@ export async function POST(request) {
                       request.headers.get('x-real-ip') || 
                       '0.0.0.0';
 
-    // Attempt DB Insertion
-    try {
-      const pool = await sql.connect(config);
+    // Keep the visitor response fast while the database and notifications finish in the background.
+    after(async () => {
+      let enquiryId = null;
 
-      // Auto-migration check: ensure RoleSpecificData column exists in tbl_SoftwareDiscovery_Enquiries
-      await pool.request().query(`
+      // Attempt DB Insertion
+      try {
+        const pool = await sql.connect(config);
+
+        // Auto-migration check: ensure RoleSpecificData column exists in tbl_SoftwareDiscovery_Enquiries
+        await pool.request().query(`
         IF NOT EXISTS (
           SELECT * FROM INFORMATION_SCHEMA.COLUMNS 
           WHERE TABLE_NAME = 'tbl_SoftwareDiscovery_Enquiries' AND COLUMN_NAME = 'RoleSpecificData'
@@ -51,9 +52,9 @@ export async function POST(request) {
         BEGIN
           ALTER TABLE tbl_SoftwareDiscovery_Enquiries ADD RoleSpecificData NVARCHAR(MAX);
         END
-      `);
+        `);
       
-      const result = await pool.request()
+        const result = await pool.request()
         .input('EnquiryReference', sql.NVarChar(50), reference)
         .input('CustomerName', sql.NVarChar(200), body.customerName)
         .input('CompanyName', sql.NVarChar(200), body.companyName || null)
@@ -96,17 +97,16 @@ export async function POST(request) {
               @RoleSpecificData, @RecommendationJson, @ProposalJson
           );
           SELECT SCOPE_IDENTITY() AS EnquiryId;
-        `);
+          `);
       
-      enquiryId = result.recordset[0]?.EnquiryId;
-      dbSaved = true;
-      await pool.close();
-    } catch (dbErr) {
-      console.error('[Database Notice] DB Save skipped/timed out on Vercel serverless environment:', dbErr.message || dbErr);
-    }
+        enquiryId = result.recordset[0]?.EnquiryId;
+        await pool.close();
+      } catch (dbErr) {
+        console.error('[Database Notice] DB Save skipped/timed out on Vercel serverless environment:', dbErr.message || dbErr);
+      }
     
-    // Construct enquiry details for WhatsApp notifications
-    const enquiryData = {
+      // Construct enquiry details for WhatsApp notifications
+      const enquiryData = {
       enquiryId: enquiryId || 0,
       enquiryReference: reference,
       customerName: body.customerName,
@@ -121,28 +121,27 @@ export async function POST(request) {
       message: body.message,
       requirement: body.requirement,
       roleSpecificData: body.roleSpecificData,
-    };
+      };
 
-    let whatsappStatus = { team: false, client: false };
+      let whatsappStatus = { team: false, client: false };
 
-    // Trigger Getgabs WhatsApp notifications (Team Alert & Client Confirmation)
-    try {
-      const [teamRes, clientRes] = await Promise.all([
-        sendTeamEnquiryNotification(enquiryData),
-        sendClientEnquiryConfirmation(enquiryData)
-      ]);
-      whatsappStatus.team = teamRes.success;
-      whatsappStatus.client = clientRes.success;
-    } catch (waErr) {
-      console.error('[WhatsApp] Error sending notifications:', waErr.message || waErr);
-    }
+      // Trigger Getgabs WhatsApp notifications (Team Alert & Client Confirmation)
+      try {
+        const [teamRes, clientRes] = await Promise.all([
+          sendTeamEnquiryNotification(enquiryData),
+          sendClientEnquiryConfirmation(enquiryData)
+        ]);
+        whatsappStatus.team = teamRes.success;
+        whatsappStatus.client = clientRes.success;
+      } catch (waErr) {
+        console.error('[WhatsApp] Error sending notifications:', waErr.message || waErr);
+      }
+    });
 
     return NextResponse.json({
       success: true,
-      enquiryId: enquiryId,
       enquiryReference: reference,
-      dbSaved: dbSaved,
-      whatsapp: whatsappStatus
+      message: 'Enquiry received successfully'
     });
     
   } catch (error) {

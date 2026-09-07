@@ -228,11 +228,11 @@ export async function sendTeamEnquiryNotification(enquiry) {
     if (typeof enquiry.roleSpecificData === 'string') {
       try {
         const parsed = JSON.parse(enquiry.roleSpecificData);
-        userSubmittedMessage = parsed.message || parsed.requirement || parsed.notes || parsed.businessType;
+        userSubmittedMessage = parsed.message || parsed.requirement || parsed.needs || parsed.notes || parsed.businessType;
       } catch (e) {}
     } else if (typeof enquiry.roleSpecificData === 'object') {
       const data = enquiry.roleSpecificData;
-      userSubmittedMessage = data.message || data.requirement || data.notes || data.businessType;
+      userSubmittedMessage = data.message || data.requirement || data.needs || data.notes || data.businessType;
     }
   }
 

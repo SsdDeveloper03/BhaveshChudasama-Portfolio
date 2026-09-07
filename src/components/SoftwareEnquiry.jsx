@@ -225,9 +225,10 @@ export default function SoftwareEnquiry({ buttonText = "Connect for Best IT Solu
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-400 mb-1">Your Software Needs</label>
+                    <label className="block text-xs font-semibold text-gray-400 mb-1">Your Software Needs *</label>
                     <textarea
                       name="needs"
+                      required
                       rows={3}
                       value={formData.needs}
                       onChange={handleChange}
