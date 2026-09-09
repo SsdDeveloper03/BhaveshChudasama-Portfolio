@@ -313,7 +313,7 @@ export function Products() {
 ---
 *Sunrise Software / Bhavesh Chudasama Portfolio*`;
 
-    const targetPhone = "918200414301";
+    const targetPhone = "919727001838";
     const encodedMessage = encodeURIComponent(message);
     
     // Smart device detection: WhatsApp Web for Desktop, wa.me for Mobile
@@ -544,7 +544,7 @@ export function Products() {
                   {formSubmitted ? (
                     <div className="flex items-center justify-center gap-3 rounded-2xl border border-emerald-500/40 bg-emerald-500/20 p-5 text-emerald-300 font-extrabold text-sm text-center shadow-lg">
                       <CheckCircle2 size={24} />
-                      <span>Opening WhatsApp... Sending details directly to +91 8200414301!</span>
+                      <span>Opening WhatsApp... Sending details directly to +91 9727001838!</span>
                     </div>
                   ) : (
                     <>
@@ -602,7 +602,7 @@ export function Products() {
                         type="submit"
                         className="w-full mt-2 rounded-full bg-[#FF6B35] py-4 text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-[#FF6B35]/35 hover:bg-[#e05a2b] transition duration-300"
                       >
-                        👉 SUBMIT &amp; SEND TO WHATSAPP (+91 8200414301)
+                        👉 SUBMIT &amp; SEND TO WHATSAPP (+91 9727001838)
                       </button>
                     </>
                   )}

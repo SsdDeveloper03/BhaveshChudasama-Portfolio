@@ -211,7 +211,7 @@ export async function sendWhatsAppTemplate({ to, receiverName, templateName, par
  * @returns {Promise<{success: boolean, data?: any, error?: string}>}
  */
 export async function sendTeamEnquiryNotification(enquiry) {
-  const teamPhone = process.env.GETGABS_TEAM_PHONE || '918200414301';
+  const teamPhone = process.env.GETGABS_TEAM_PHONE || '919727001838';
   const reference = enquiry.enquiryReference || enquiry.reference || 'N/A';
 
   console.log(`[WhatsApp] Sending team notification for enquiry ${reference}...`);

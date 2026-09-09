@@ -112,7 +112,7 @@ export function SoftwareExpertExpandedModal({
 ---
 *Sunrise Software / Software Expert Matrix*`;
 
-    const targetPhone = "918200414301";
+    const targetPhone = "919727001838";
     const encodedMessage = encodeURIComponent(message);
     const isMobile =
       typeof window !== "undefined" &&
@@ -667,7 +667,7 @@ export function SoftwareExpertExpandedModal({
                     className="flex items-center justify-center gap-2.5 p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs sm:text-sm text-center"
                   >
                     <CheckCircle2 size={18} />
-                    <span>Opening WhatsApp... Details sent directly to +91 8200414301!</span>
+                    <span>Opening WhatsApp... Details sent directly to +91 9727001838!</span>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-3">
