@@ -5,7 +5,6 @@ import { CalendarDays, Mail, MapPin, Phone, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { ContactForm } from "@/components/ui/ContactForm";
-import { SocialLinks } from "@/components/ui/SocialLinks";
 import { LOCATION, ROLE, SITE_NAME } from "@/lib/constants";
 
 const contactDetails = [
@@ -80,7 +79,6 @@ export function Contact() {
                   <p className="font-heading text-xl font-semibold text-white">{SITE_NAME}</p>
                   <p className="mt-2 text-sm text-white/70">{ROLE}</p>
                   <p className="mt-2 text-sm text-white/60">Sunrise Software Development</p>
-                  <SocialLinks />
                 </div>
               </div>
             </div>

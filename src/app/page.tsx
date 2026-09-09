@@ -12,9 +12,6 @@ import { WhatsAppFloatingWidget } from "@/components/ui/WhatsAppFloatingWidget";
 import { CardSkeleton } from "@/components/ui/CardSkeleton";
 import { SectionSkeleton } from "@/components/ui/SectionSkeleton";
 
-const Journey = dynamic(() => import("@/components/sections/Journey").then((mod) => mod.Journey), {
-  loading: () => <SectionSkeleton />,
-});
 const Products = dynamic(() => import("@/components/sections/Products").then((mod) => mod.Products), {
   loading: () => <SectionSkeleton />,
 });
@@ -28,9 +25,6 @@ const LifeMentor = dynamic(() => import("@/components/sections/LifeMentor").then
   loading: () => <SectionSkeleton />,
 });
 const PublicSpeaker = dynamic(() => import("@/components/sections/PublicSpeaker").then((mod) => mod.PublicSpeaker), {
-  loading: () => <SectionSkeleton />,
-});
-const Expertise = dynamic(() => import("@/components/sections/Expertise").then((mod) => mod.Expertise), {
   loading: () => <SectionSkeleton />,
 });
 const Testimonials = dynamic(() => import("@/components/sections/Testimonials").then((mod) => mod.Testimonials), {
@@ -55,7 +49,6 @@ export default function Home() {
         <GrowthCoach />
         <LifeMentor />
         <PublicSpeaker />
-        <Expertise />
         <Testimonials />
         <Contact />
       </main>

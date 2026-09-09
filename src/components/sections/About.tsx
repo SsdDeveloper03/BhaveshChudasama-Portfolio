@@ -12,6 +12,10 @@ import {
   Sparkles,
   Zap,
   CheckCircle2,
+  Rocket,
+  Building2,
+  Boxes,
+  Users,
 } from "lucide-react";
 import { StatCard } from "@/components/ui/StatCard";
 
@@ -91,10 +95,10 @@ const bentoCards = [
 ];
 
 const highlights = [
-  { value: "2009", label: "Started Tech Journey" },
-  { value: "2016", label: "Founded Sunrise Software" },
-  { value: "5+", label: "Enterprise Software Products" },
-  { value: "100+", label: "SME Businesses Empowered" },
+  { value: "2009", label: "Started Tech Journey", icon: Rocket },
+  { value: "2016", label: "Founded Sunrise Software", icon: Building2 },
+  { value: "5+", label: "Enterprise Software Products", icon: Boxes },
+  { value: "100+", label: "SME Businesses Empowered", icon: Users },
 ];
 
 export function About() {
@@ -245,7 +249,7 @@ export function About() {
         {/* Stats Grid */}
         <div className="mt-12 grid gap-4 sm:grid-cols-4 grid-cols-2">
           {highlights.map((item) => (
-            <StatCard key={item.label} value={item.value} label={item.label} />
+            <StatCard key={item.label} value={item.value} label={item.label} icon={item.icon} />
           ))}
         </div>
 

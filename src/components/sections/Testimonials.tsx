@@ -1,23 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 
-import { googleReviews, type GoogleReview } from "@/data/testimonials";
+import { clientTestimonials, type ClientTestimonial } from "@/data/testimonials";
+import { ClientLogos } from "@/components/ui/ClientLogos";
 
-function ReviewCard({ review }: { review: GoogleReview }) {
+function ReviewCard({ review }: { review: ClientTestimonial }) {
   const [expanded, setExpanded] = useState(false);
   const longReview = review.body.length > 170;
   const visibleBody = longReview && !expanded ? `${review.body.slice(0, 170).trimEnd()}…` : review.body;
   return (
-    <article className="flex min-h-[20rem] flex-col border border-white/10 bg-white/[0.03] p-6 shadow-[0_18px_45px_rgba(0,0,0,0.12)] rounded-3xl backdrop-blur-md">
+    <article className="flex min-h-[21rem] flex-col rounded-[2rem] border border-white/10 bg-[#0b1220]/80 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.25)] backdrop-blur-md sm:p-8">
       <div className="flex gap-1 text-sunrise" aria-label="5 out of 5 stars">
         {Array.from({ length: 5 }, (_, i) => (
           <Star key={i} size={14} fill="currentColor" aria-hidden="true" />
         ))}
       </div>
-      <blockquote className="mt-5 whitespace-pre-line text-sm leading-7 text-white/80">&ldquo;{visibleBody}&rdquo;</blockquote>
+      <p className="mt-4 text-xs font-semibold uppercase tracking-[0.22em] text-sunrise/80">{review.category}</p>
+      <blockquote className="mt-4 whitespace-pre-line text-base leading-8 text-white/80 sm:text-lg">&ldquo;{visibleBody}&rdquo;</blockquote>
       {longReview && (
         <button
           type="button"
@@ -34,7 +36,7 @@ function ReviewCard({ review }: { review: GoogleReview }) {
         </div>
         <div>
           <p className="text-sm font-semibold text-white">{review.authorName}</p>
-          <p className="mt-0.5 text-xs text-white/50">Google Review</p>
+          <p className="mt-0.5 text-xs text-white/50">{review.role} · Sunrise client</p>
         </div>
       </footer>
     </article>
@@ -42,55 +44,68 @@ function ReviewCard({ review }: { review: GoogleReview }) {
 }
 
 function Reviews() {
-  const [page, setPage] = useState(0);
-  const [perPage, setPerPage] = useState(1);
+  const reducedMotion = useReducedMotion();
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    const update = () => setPerPage(window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1);
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
+    if (reducedMotion || paused) return;
+    const interval = window.setInterval(() => {
+      setActive((value) => (value + 1) % clientTestimonials.length);
+    }, 6500);
+    return () => window.clearInterval(interval);
+  }, [paused, reducedMotion]);
 
-  const totalPages = Math.ceil(googleReviews.length / perPage);
-  const safePage = Math.min(page, totalPages - 1);
-  const current = googleReviews.slice(safePage * perPage, safePage * perPage + perPage);
+  const move = (direction: number) => {
+    setActive((value) => (value + direction + clientTestimonials.length) % clientTestimonials.length);
+  };
 
   return (
-    <div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {current.map((review) => (
-          <ReviewCard key={review.authorName} review={review} />
-        ))}
+    <div
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
+    >
+      <div className="relative">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={clientTestimonials[active].authorName}
+            initial={reducedMotion ? false : { opacity: 0, x: 28 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={reducedMotion ? undefined : { opacity: 0, x: -28 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+          >
+            <ReviewCard review={clientTestimonials[active]} />
+          </motion.div>
+        </AnimatePresence>
       </div>
-      <nav aria-label="Google review pages" className="mt-8 flex items-center justify-between gap-4">
+      <nav aria-label="Client testimonial slides" className="mt-6 flex items-center justify-between gap-4">
         <button
           type="button"
-          onClick={() => setPage((value) => Math.max(0, value - 1))}
-          disabled={safePage === 0}
+          onClick={() => move(-1)}
           aria-label="Previous review page"
-          className="rounded-full border border-white/15 p-2 text-white transition hover:border-sunrise/60 hover:text-sunrise disabled:cursor-not-allowed disabled:opacity-35"
+          className="rounded-full border border-white/15 p-3 text-white transition hover:border-sunrise/60 hover:text-sunrise focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sunrise"
         >
           <ChevronLeft size={18} />
         </button>
         <div className="flex gap-2">
-          {Array.from({ length: totalPages }, (_, item) => (
+          {clientTestimonials.map((review, item) => (
             <button
               key={item}
               type="button"
-              onClick={() => setPage(item)}
+              onClick={() => setActive(item)}
               aria-label={`Show review page ${item + 1}`}
-              aria-current={item === safePage ? "page" : undefined}
-              className={`size-2.5 rounded-full transition ${item === safePage ? "bg-sunrise scale-125" : "bg-white/25 hover:bg-white/60"}`}
+              aria-current={item === active ? "true" : undefined}
+              className={`h-1.5 rounded-full transition-all ${item === active ? "w-8 bg-sunrise" : "w-1.5 bg-white/25 hover:bg-white/60"}`}
             />
           ))}
         </div>
         <button
           type="button"
-          onClick={() => setPage((value) => Math.min(totalPages - 1, value + 1))}
-          disabled={safePage === totalPages - 1}
+          onClick={() => move(1)}
           aria-label="Next review page"
-          className="rounded-full border border-white/15 p-2 text-white transition hover:border-sunrise/60 hover:text-sunrise disabled:cursor-not-allowed disabled:opacity-35"
+          className="rounded-full border border-white/15 p-3 text-white transition hover:border-sunrise/60 hover:text-sunrise focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sunrise"
         >
           <ChevronRight size={18} />
         </button>
@@ -124,16 +139,51 @@ export function Testimonials() {
           </p>
         </motion.div>
 
-        {/* PRIMARY CLIENT GOOGLE REVIEWS SHOWCASE */}
-        <div className="mt-10 sm:mt-14">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
-            <p className="text-xs font-mono font-bold uppercase tracking-[0.28em] text-sunrise flex items-center gap-2">
-              <Star className="w-4 h-4 text-sunrise fill-sunrise" />
-              VERIFIED GOOGLE CLIENT REVIEWS
+        <div className="mt-10 grid gap-10 sm:mt-14 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-16">
+          <motion.div
+            initial={reducedMotion ? false : { opacity: 0, x: -22 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.55 }}
+            className="lg:pr-4"
+          >
+            <h3 className="font-heading text-4xl font-bold leading-[1.08] text-white sm:text-5xl">
+              Hear from <span className="text-sunrise">happy customers.</span>
+            </h3>
+            <p className="mt-5 max-w-lg text-base leading-8 text-white/65">
+              Real feedback from teams who use thoughtful software, reliable support, and practical systems to run their businesses better.
             </p>
-            <span className="text-xs text-white/50 font-mono hidden sm:inline">5.0 ★ Star Satisfaction</span>
+            <div className="mt-8 inline-flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
+              <Star className="size-5 fill-emerald-400 text-emerald-400" />
+              <span className="text-sm font-bold text-white">100% customer satisfaction</span>
+            </div>
+          </motion.div>
+
+          <div>
+            <div className="mb-5 flex items-center justify-between">
+              <p className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-[0.28em] text-sunrise">
+                <Star className="size-4 fill-sunrise" />
+                CLIENT TESTIMONIALS
+              </p>
+              <span className="hidden text-xs font-mono text-white/50 sm:inline">5.0 ★ average rating</span>
+            </div>
+            <Reviews />
           </div>
-          <Reviews />
+        </div>
+
+        <div className="mt-20 border-t border-white/10 pt-10 sm:mt-24">
+          <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+            <div>
+              <p className="text-xs font-mono font-bold uppercase tracking-[0.28em] text-sunrise">OUR CLIENTS</p>
+              <h3 className="mt-3 max-w-md font-heading text-3xl font-bold leading-tight text-white sm:text-4xl">
+                Trusted by top companies and organizations.
+              </h3>
+              <p className="mt-4 max-w-md text-sm leading-7 text-white/60">
+                From ambitious startups to established teams, our clients trust Sunrise to turn complex work into clear digital systems.
+              </p>
+            </div>
+            <ClientLogos />
+          </div>
         </div>
       </div>
     </section>

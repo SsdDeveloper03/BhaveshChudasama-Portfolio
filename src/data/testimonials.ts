@@ -10,6 +10,13 @@ export type GoogleReview = {
   body: string;
 };
 
+export type ClientTestimonial = {
+  authorName: string;
+  role: string;
+  body: string;
+  category: string;
+};
+
 // Set videoAvailable to true only after the matching file has been added to public/videos/testimonials.
 export const teamTestimonials: TeamTestimonial[] = [
   { name: "Smit Chavda", role: "Senior Developer", videoUrl: "/videos/testimonials/smit-chavda.mp4", videoAvailable: false },
@@ -37,5 +44,68 @@ export const googleReviews: GoogleReview[] = [
   {
     authorName: "National Tailors Baran",
     body: "Great experience, less time consumed & perfect software",
+  },
+];
+
+export const clientTestimonials: ClientTestimonial[] = [
+  {
+    authorName: "Shahriar",
+    role: "Owner",
+    category: "Tailoring business",
+    body: "It is the perfect software for our tailoring business. The software is very easy to use, and all features have good details so we can manage our business well. Moreover, we get support from the team properly, even if they are from another country.",
+  },
+  {
+    authorName: "J K.",
+    role: "Owner",
+    category: "Tailoring shop management",
+    body: "Very helpful in overall tailoring shop management. Every routine work is managed in a good way, and it is easy to manage customers, deliveries, measurements, accounting, and more.",
+  },
+  {
+    authorName: "Expo",
+    role: "Owner",
+    category: "Order management",
+    body: "Using tailoring software, we are making customer orders efficiently and storing measurement details accurately. It helps us a lot in the timely delivery of orders.",
+  },
+  {
+    authorName: "Harnek G.",
+    role: "Owner",
+    category: "Business growth",
+    body: "We are using this software since 1+ year and we are growing good with Team Sunrise. They are rendering good support and the software is also very useful. Overall satisfied.",
+  },
+  {
+    authorName: "Vazid S.",
+    role: "Owner",
+    category: "Tailoring solutions",
+    body: "Sunrise tailoring software is a great product for small and large tailoring business solutions. It gave us many features that we never had before. We are very much satisfied with the overall software implementation process.",
+  },
+  {
+    authorName: "Afsar K.",
+    role: "Owner",
+    category: "Tailoring software",
+    body: "Overall experience is very good. 100% recommend trying this software. They have very good expertise and experience in tailoring business and software development. Best software in budget with timely and reliable service.",
+  },
+  {
+    authorName: "Umesh G.",
+    role: "Owner",
+    category: "Reports and billing",
+    body: "Sunrise Tailoring Software is really helpful for tailoring business. We can print measurement and invoice copies in the required format. Very useful reports help us plan worker work, and we can easily see outstanding amounts and old order details.",
+  },
+  {
+    authorName: "Rinal",
+    role: "Owner",
+    category: "Boutique operations",
+    body: "It can be tailored to fit nearly any need. Sunrise makes the workday simpler and more efficient. Preparing a tailoring invoice for a customer and a measurement sheet for a worker was never this easy before.",
+  },
+  {
+    authorName: "Jatin",
+    role: "Owner",
+    category: "Business management",
+    body: "It is very useful software to upgrade my business and work style. I do every activity of my tailoring shop in this software. Sunrise made our work easy, and we get all details very fast.",
+  },
+  {
+    authorName: "Yusuf",
+    role: "Owner",
+    category: "Tailoring software",
+    body: "I found the best tailoring software and a reliable software developer. They are always happy to help, so we received timely support and guidance which helped us a lot to grow our business.",
   },
 ];

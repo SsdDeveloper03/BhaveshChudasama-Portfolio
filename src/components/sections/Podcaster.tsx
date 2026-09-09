@@ -3,12 +3,15 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
-import { Radio, Mic, Sparkles, CheckCircle2, TrendingUp, Award, Play, ExternalLink } from "lucide-react";
-import { podcasts } from "@/data/podcasts";
+import { Radio, Mic, Sparkles, TrendingUp, Award, ExternalLink } from "lucide-react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 import { PodcastGuestModal } from "@/components/ui/PodcastGuestModal";
 import PodcasterEnquiry from "@/components/PodcasterEnquiry";
+import { PodcastImageSlider } from "@/components/sections/PodcastImageSlider";
+import { EpisodeGrid } from "@/components/podcast/EpisodeGrid";
+import { PodcastModal } from "@/components/podcast/PodcastModal";
+import { podcasts, type PodcastEpisode } from "@/data/podcasts";
 
 const podcastPillars = [
   {
@@ -39,8 +42,8 @@ const podcastPillars = [
 
 export function Podcaster() {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
   const [isGuestModalOpen, setIsGuestModalOpen] = useState(false);
+  const [selectedEpisode, setSelectedEpisode] = useState<PodcastEpisode | null>(null);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -210,79 +213,44 @@ export function Podcaster() {
             </a>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-3">
-            {podcasts.map((episode) => {
-              const isPlaying = activeVideoId === episode.videoId;
-              return (
-                <motion.div
-                  key={episode.id}
-                  whileHover={{ y: -4 }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/15 bg-[#0c101c] p-4 backdrop-blur-md shadow-xl transition-all duration-300 hover:border-[#FF7A00] hover:shadow-[0_10px_30px_rgba(255,122,0,0.25)]"
-                >
-                  <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-slate-950 mb-3.5 shadow-md">
-                    {isPlaying ? (
-                      <iframe
-                        src={`https://www.youtube-nocookie.com/embed/${episode.videoId}?autoplay=1`}
-                        title={episode.title}
-                        className="h-full w-full border-0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                      />
-                    ) : (
-                      <div
-                        onClick={() => setActiveVideoId(episode.videoId)}
-                        className="relative h-full w-full cursor-pointer overflow-hidden"
-                      >
-                        <img
-                          src={`https://img.youtube.com/vi/${episode.videoId}/hqdefault.jpg`}
-                          alt={episode.title}
-                          className="h-full w-full object-cover group-hover:scale-105 transition duration-500"
-                        />
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                          {/* Play Button Pulse Animation */}
-                          <motion.div
-                            animate={{ scale: [1, 1.12, 1] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                            className="flex h-12 w-12 items-center justify-center rounded-full bg-red-600 text-white shadow-lg shadow-red-600/50 group-hover:scale-125 transition duration-300"
-                          >
-                            <Play size={20} className="fill-white ml-0.5" />
-                          </motion.div>
-                        </div>
-                        
-                        {/* Floating Category Pill Tag */}
-                        <span className="absolute top-2 left-2 rounded-full border border-white/20 bg-black/80 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-mono font-black text-[#FF7A00]">
-                          EPISODE {episode.episodeNumber} • {episode.category}
-                        </span>
-                      </div>
-                    )}
-                  </div>
+          <div className="grid items-center gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+            <motion.div
+              initial={prefersReducedMotion ? false : { opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55 }}
+              className="max-w-md"
+            >
+              <p className="text-xs font-mono font-bold uppercase tracking-[0.28em] text-[#FF7A00]">Cinematic founder conversations</p>
+              <h4 className="mt-4 text-3xl font-black leading-tight text-white sm:text-4xl">
+                Real voices. <span className="text-[#FF7A00]">Real growth.</span>
+              </h4>
+              <p className="mt-4 text-sm leading-7 text-white/70 sm:text-base">
+                Swipe through the latest Growth Ka Digital Partner episodes and take the conversation from the studio into your next business decision.
+              </p>
+              <div className="mt-7 grid gap-3 text-xs font-semibold text-white/70 sm:grid-cols-2">
+                <span className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">Founder-led stories</span>
+                <span className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">Actionable strategy</span>
+              </div>
+            </motion.div>
+            <PodcastImageSlider />
+          </div>
 
-                  <span className="text-[10px] font-mono font-bold text-white/50">{episode.channelName}</span>
-                  <h4 className="mt-1 text-sm font-extrabold text-white group-hover:text-[#FF7A00] transition line-clamp-2">
-                    {episode.title}
-                  </h4>
-
-                  <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2.5 text-xs font-bold">
-                    <button
-                      type="button"
-                      onClick={() => setActiveVideoId(episode.videoId)}
-                      className="text-red-400 hover:text-white transition inline-flex items-center gap-1 text-[11px]"
-                    >
-                      ▶ {isPlaying ? "Playing Now" : "Watch Episode"}
-                    </button>
-                    <a
-                      href={`https://youtu.be/${episode.videoId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/40 hover:text-[#FF7A00] transition"
-                      title="Open on YouTube"
-                    >
-                      <ExternalLink size={13} />
-                    </a>
-                  </div>
-                </motion.div>
-              );
-            })}
+          <div className="mt-12 space-y-6">
+            <div className="flex flex-col gap-3 border-b border-white/10 pb-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-mono font-bold uppercase tracking-[0.28em] text-[#FF7A00]">EPISODE LIBRARY</p>
+                <h4 className="mt-2 text-2xl font-black text-white sm:text-3xl">Watch the latest conversations</h4>
+              </div>
+              <p className="max-w-sm text-xs leading-6 text-white/55 sm:text-right">
+                Select an episode to open the full YouTube experience.
+              </p>
+            </div>
+            <EpisodeGrid
+              episodes={podcasts}
+              onSelectEpisode={setSelectedEpisode}
+              selectedEpisodeId={selectedEpisode?.id}
+            />
           </div>
         </div>
 
@@ -322,6 +290,10 @@ export function Podcaster() {
       <PodcastGuestModal
         isOpen={isGuestModalOpen}
         onClose={() => setIsGuestModalOpen(false)}
+      />
+      <PodcastModal
+        episode={selectedEpisode}
+        onClose={() => setSelectedEpisode(null)}
       />
     </section>
   );

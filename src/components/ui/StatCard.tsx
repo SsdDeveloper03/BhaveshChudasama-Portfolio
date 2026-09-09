@@ -2,13 +2,15 @@
 
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import type { LucideIcon } from "lucide-react";
 
 interface StatCardProps {
   value: string;
   label: string;
+  icon?: LucideIcon;
 }
 
-export function StatCard({ value, label }: StatCardProps) {
+export function StatCard({ value, label, icon: Icon }: StatCardProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const inView = useInView(ref, { once: true, amount: 0.35 });
 
@@ -48,6 +50,21 @@ export function StatCard({ value, label }: StatCardProps) {
       whileHover={{ y: -6 }}
       className="glass-card rounded-[1.4rem] border border-white/10 p-5 transition-all duration-300 hover:border-sunrise/30 hover:shadow-[0_16px_48px_rgba(255,122,0,0.12)]"
     >
+      {Icon && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={inView ? { opacity: 1, scale: 1 } : undefined}
+          transition={{ duration: 0.4, delay: 0.15 }}
+          className="mb-4 flex size-10 items-center justify-center rounded-xl border border-sunrise/25 bg-sunrise/10 text-sunrise"
+        >
+          <motion.span
+            animate={inView ? { rotate: [0, -6, 6, 0] } : undefined}
+            transition={{ duration: 1.8, delay: 0.5, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
+          >
+            <Icon size={19} />
+          </motion.span>
+        </motion.div>
+      )}
       <p className="font-heading text-2xl font-semibold text-white">
         {count}
         {suffix}
