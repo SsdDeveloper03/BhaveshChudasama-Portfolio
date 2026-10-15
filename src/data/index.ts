@@ -203,6 +203,33 @@ export const podcastData = {
       duration: "48:45",
       featured: false,
     },
+    {
+      id: "ep4",
+      title: "Episode 4: How to Build Personal Brand | Brand Building & Digital Marketing",
+      videoId: "1vbEoi4YuZ0",
+      thumbnail: "https://img.youtube.com/vi/1vbEoi4YuZ0/hqdefault.jpg",
+      url: "https://youtu.be/1vbEoi4YuZ0?si=lKBEvGKMINmehlDt",
+      duration: "38:20",
+      featured: false,
+    },
+    {
+      id: "ep5",
+      title: "Episode 5: Expert Ayurved Podcast Gujarati | સ્વસ્થ રહેવાનું સાચું રહસ્ય",
+      videoId: "ha38TqpTkoo",
+      thumbnail: "https://img.youtube.com/vi/ha38TqpTkoo/hqdefault.jpg",
+      url: "https://youtu.be/ha38TqpTkoo?si=234MIySRkVWcBQ4N",
+      duration: "42:10",
+      featured: false,
+    },
+    {
+      id: "ep6",
+      title: "Episode 6: वास्तु शास्त्र क्या है? बिना तोड़फोड़ के वास्तु उपाय",
+      videoId: "28O_v97tRSE",
+      thumbnail: "https://img.youtube.com/vi/28O_v97tRSE/hqdefault.jpg",
+      url: "https://youtu.be/28O_v97tRSE?si=giQz_L4K-bA-526i",
+      duration: "35:40",
+      featured: false,
+    },
   ],
 };
 

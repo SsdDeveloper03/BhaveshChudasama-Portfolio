@@ -43,6 +43,33 @@ export const podcasts: PodcastEpisode[] = [
     description: "Discover actionable strategies on scaling business operations, optimizing tech infrastructure, and driving exponential growth.",
     featured: true,
   },
+  {
+    id: "episode-04",
+    episodeNumber: "04",
+    title: "How to Build Personal Brand | Brand Building & Digital Marketing",
+    videoId: "1vbEoi4YuZ0",
+    category: "Personal Branding & Growth",
+    channelName: "Growth Ka Digital Partner (@gdppodcast)",
+    description: "Learn how to build a powerful personal brand, leverage the business benefits of podcasting, and establish lasting digital authority.",
+  },
+  {
+    id: "episode-05",
+    episodeNumber: "05",
+    title: "Expert Ayurved Podcast Gujarati | સ્વસ્થ રહેવાનું સાચું રહસ્ય",
+    videoId: "ha38TqpTkoo",
+    category: "Ayurveda & Health Insights",
+    channelName: "Growth Ka Digital Partner (@gdppodcast)",
+    description: "An insightful Gujarati podcast exploring the timeless wisdom of Ayurveda, natural holistic wellness, and healthy living.",
+  },
+  {
+    id: "episode-06",
+    episodeNumber: "06",
+    title: "वास्तु शास्त्र क्या है? बिना तोड़फोड़ के वास्तु उपाय | Vastu Podcast",
+    videoId: "28O_v97tRSE",
+    category: "Vastu Shastra & Space Harmony",
+    channelName: "Growth Ka Digital Partner (@gdppodcast)",
+    description: "Discover practical Vastu Shastra guidance and effective non-demolition remedies to harmonize positive energy in living and work spaces.",
+  },
 ];
 
 export function getSortedEpisodes(
