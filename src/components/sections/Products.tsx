@@ -12,6 +12,7 @@ import {
   Sparkles,
   Receipt,
   Building2,
+  CalendarCheck,
   ExternalLink,
   X,
   MessageSquare,
@@ -122,6 +123,22 @@ const softwareList = [
       "Warehouse & Stock: Real-time multi-warehouse transfers & vendor ledgers.",
     ],
     image: "/images/products/business_real_env.png",
+  },
+  {
+    id: "smart-appointment",
+    name: "Smart Appointment & Queue ERP",
+    users: "14,800+",
+    icon: CalendarCheck,
+    color: "#06B6D4",
+    bg: "rgba(6, 182, 212, 0.12)",
+    borderColor: "rgba(6, 182, 212, 0.3)",
+    description: "Omnichannel appointment scheduling, token queue management, doctor/staff availability rosters & automated WhatsApp reminders.",
+    features: [
+      "Online & Walk-In Booking: Instant slots, token queue system & QR check-in.",
+      "Staff & Doctor Rosters: Real-time calendar availability & multi-location sync.",
+      "Automated Reminders: WhatsApp/SMS confirmation alerts & zero no-show rates.",
+    ],
+    image: "/images/products/appointment_real_env.png",
   },
 ];
 
@@ -458,12 +475,13 @@ export function Products() {
                       <button
                         type="button"
                         onClick={() => {
-                          const tabMap: Record<string, "tailoring" | "transport" | "payroll" | "crm"> = {
+                          const tabMap: Record<string, "tailoring" | "transport" | "payroll" | "crm" | "appointment"> = {
                             tailoring: "tailoring",
                             transport: "transport",
                             payroll: "payroll",
                             billing: "crm",
                             "business-management": "crm",
+                            "smart-appointment": "appointment",
                           };
                           const targetTab = tabMap[item.id] || "tailoring";
                           window.dispatchEvent(new CustomEvent("open-software-matrix", { detail: { tab: targetTab } }));

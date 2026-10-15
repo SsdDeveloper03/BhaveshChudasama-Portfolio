@@ -10,6 +10,7 @@ import {
   Truck,
   Users,
   BarChart3,
+  CalendarCheck,
   CheckCircle2,
   Sparkles,
   MessageSquare,
@@ -22,7 +23,7 @@ import {
 interface SoftwareExpertExpandedModalProps {
   isOpen?: boolean;
   onClose?: () => void;
-  defaultTab?: "tailoring" | "transport" | "payroll" | "crm";
+  defaultTab?: "tailoring" | "transport" | "payroll" | "crm" | "appointment";
 }
 
 export function SoftwareExpertExpandedModal({
@@ -32,7 +33,7 @@ export function SoftwareExpertExpandedModal({
 }: SoftwareExpertExpandedModalProps) {
   const [mounted, setMounted] = useState(false);
   const [internalIsOpen, setInternalIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"tailoring" | "transport" | "payroll" | "crm">(defaultTab);
+  const [activeTab, setActiveTab] = useState<"tailoring" | "transport" | "payroll" | "crm" | "appointment">(defaultTab);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -164,6 +165,14 @@ export function SoftwareExpertExpandedModal({
       color: "text-orange-400",
       activeBg: "bg-orange-500/20 border-orange-500/50 text-orange-300",
       requirementText: "Business CRM & Stock ERP",
+    },
+    {
+      id: "appointment" as const,
+      label: "Smart Appointment",
+      icon: CalendarCheck,
+      color: "text-cyan-400",
+      activeBg: "bg-cyan-500/20 border-cyan-500/50 text-cyan-300",
+      requirementText: "Smart Appointment Management Software",
     },
   ];
 
@@ -645,6 +654,86 @@ export function SoftwareExpertExpandedModal({
                 </motion.div>
               )}
 
+              {/* TAB 5: SMART APPOINTMENT & QUEUE MANAGEMENT */}
+              {activeTab === "appointment" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6"
+                >
+                  <div className="border-b border-white/10 pb-3">
+                    <h3 className="text-base sm:text-xl font-black text-cyan-400 uppercase tracking-tight flex items-center gap-2">
+                      <CalendarCheck size={20} />
+                      Tab 5: 📅 Smart Appointment &amp; Queue Management
+                    </h3>
+                    <p className="text-xs sm:text-sm text-white/70 font-medium mt-0.5">
+                      Book Smarter. Manage Better. Grow Faster — Designed for Clinics, Hospitals, Salons &amp; Service Providers
+                    </p>
+                  </div>
+
+                  {/* Dashboard Preview Banner */}
+                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-cyan-500/30 bg-slate-950 shadow-2xl">
+                    <Image
+                      src="/images/products/appointment_real_env.png"
+                      alt="Smart Appointment &amp; Queue Management Preview"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 900px"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60" />
+                    <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs font-bold text-white">
+                      <span className="flex items-center gap-1.5 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md border border-cyan-500/30">
+                        <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+                        Live Queue &amp; Multi-Channel Booking Sync
+                      </span>
+                      <span className="hidden sm:inline-block font-mono text-cyan-300 drop-shadow bg-black/60 px-2 py-1 rounded-lg backdrop-blur-md">
+                        Zero No-Shows
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Feature Breakdown Cards */}
+                  <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2">
+                    <div className="rounded-2xl border border-cyan-500/30 bg-cyan-500/5 p-4 sm:p-5 hover:border-cyan-500/50 transition-colors">
+                      <div className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider mb-2">
+                        Omnichannel Self-Booking &amp; Desk
+                      </div>
+                      <p className="text-xs text-white/80 leading-relaxed font-medium">
+                        Instant 24/7 web booking widget, QR-code self-check-in at reception &amp; rapid walk-in token generation.
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-cyan-500/30 bg-cyan-500/5 p-4 sm:p-5 hover:border-cyan-500/50 transition-colors">
+                      <div className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider mb-2">
+                        Doctor &amp; Staff Calendar Rosters
+                      </div>
+                      <p className="text-xs text-white/80 leading-relaxed font-medium">
+                        Real-time practitioner duty schedules, slot duration buffers, emergency slot overrides &amp; multi-branch coordination.
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-cyan-500/30 bg-cyan-500/5 p-4 sm:p-5 hover:border-cyan-500/50 transition-colors">
+                      <div className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider mb-2">
+                        Automated WhatsApp Reminders
+                      </div>
+                      <p className="text-xs text-white/80 leading-relaxed font-medium">
+                        Instant booking confirmations, automated 2-way WhatsApp reminder alerts &amp; 1-tap reschedule links to cut no-shows.
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-cyan-500/30 bg-cyan-500/5 p-4 sm:p-5 hover:border-cyan-500/50 transition-colors">
+                      <div className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider mb-2">
+                        Live Digital Queue &amp; Patient Records
+                      </div>
+                      <p className="text-xs text-white/80 leading-relaxed font-medium">
+                        Live TV waiting room token display, estimated wait-time calculation, patient visit histories &amp; practitioner analytics.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
               {/* Consultation & Demo Request Form (Inside Scrollable Body - Never Blocks Content) */}
               <div
                 id="matrix-consultation-form"
@@ -705,6 +794,7 @@ export function SoftwareExpertExpandedModal({
                           <option value="Transport & Fleet ERP">Transport &amp; Fleet ERP</option>
                           <option value="HR & Enterprise Payroll Software">HR &amp; Enterprise Payroll Software</option>
                           <option value="Business CRM & Stock ERP">Business CRM &amp; Stock ERP</option>
+                          <option value="Smart Appointment Management Software">Smart Appointment Management Software</option>
                           <option value="Custom Enterprise IT Solution">Custom Enterprise IT Solution</option>
                         </select>
                       </div>

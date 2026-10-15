@@ -285,6 +285,61 @@ export const products: Product[] = [
       }
     ],
     image: "/images/products/business-management-placeholder.jpg"
+  },
+  {
+    id: "smart-appointment",
+    number: "06",
+    name: "Smart Appointment Software",
+    subtitle: "Book Smarter. Manage Better. Grow Faster.",
+    category: "Appointments • Healthcare • Service Businesses",
+    description: "An advanced appointment scheduling and queue management system designed for clinics, doctors, hospitals, salons, spas, consultants, and service professionals — unifying omnichannel bookings, real-time doctor availability, automated WhatsApp alerts, and queue analytics.",
+    features: [
+      "BOOKINGS",
+      "ROSTERS",
+      "REMINDERS",
+      "QUEUES",
+      "PATIENTS",
+      "ANALYTICS"
+    ],
+    featureDetails: [
+      {
+        number: "01",
+        name: "BOOKINGS",
+        tagline: "Omnichannel Online & Walk-in Booking",
+        description: "Seamless self-service web booking, QR-code walk-in registration, and centralized appointment booking desk."
+      },
+      {
+        number: "02",
+        name: "ROSTERS",
+        tagline: "Doctor & Specialist Availability",
+        description: "Real-time doctor duty rosters, shift schedules, vacation blocks, and multi-location clinic coordination."
+      },
+      {
+        number: "03",
+        name: "REMINDERS",
+        tagline: "Automated WhatsApp & SMS Alerts",
+        description: "Instant booking confirmations, reminder notifications, and 1-tap reschedule/cancellation links to eliminate no-shows."
+      },
+      {
+        number: "04",
+        name: "QUEUES",
+        tagline: "Smart Token & Live Queue Management",
+        description: "Dynamic token calling display, real-time patient queue status, and estimated wait-time tracking."
+      },
+      {
+        number: "05",
+        name: "PATIENTS",
+        tagline: "Patient & Client Visit History",
+        description: "Digital client profiles, past appointment logs, consultation notes, and recurring visit schedules."
+      },
+      {
+        number: "06",
+        name: "ANALYTICS",
+        tagline: "Appointment & Operational Analytics",
+        description: "Peak-hour analytics, practitioner utilization rates, cancellation reports, and daily footfall metrics."
+      }
+    ],
+    image: "/images/products/appointment_real_env.png"
   }
 ];
 

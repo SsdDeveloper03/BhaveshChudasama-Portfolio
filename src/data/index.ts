@@ -170,6 +170,15 @@ export const softwareData = [
     users: "100+",
     color: "#9C27B0",
   },
+  {
+    id: "appointment",
+    icon: "📅",
+    title: "Smart Appointment Software",
+    description: "Book smarter, manage better. Complete appointment scheduling, token queue & clinic management system.",
+    features: ["Online Booking", "Doctor Rosters", "WhatsApp Alerts", "Token Queue", "Analytics"],
+    users: "180+",
+    color: "#00BCD4",
+  },
 ];
 
 export const podcastData = {

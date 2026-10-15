@@ -61,6 +61,8 @@ export function getEnquiryType(source) {
     Payroll: 'Payroll Management',
     Billing: 'Billing & ERP',
     BusinessManagement: 'Business Management',
+    SmartAppointment: 'Smart Appointment Software',
+    Appointment: 'Smart Appointment Software',
   };
 
   if (sourceMap[source]) {
